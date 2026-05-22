@@ -19,10 +19,10 @@ export default function PembicaraIndex() {
     setSpeakers(Array.isArray(data) ? data : data.data || []);
   };
 
-  const hapusPembicara = async (id: number) => {
+  const hapusPembicara = async (pembicaraId: number) => {
     if (!confirm("Yakin mau hapus pembicara ini?")) return;
 
-    await fetch(`${API_URL}/pembicara/${id}`, {
+    await fetch(`${API_URL}/pembicara/${pembicaraId}`, {
       method: "DELETE",
     });
 
