@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import Input from "../../../component/ui/Input";
 import Button from "../../../component/ui/Button";
 
+const API_URL = "https://backend-invofest-mla8.vercel.app";
+
 type FormData = {
   name: string;
   role: string;
@@ -15,7 +17,7 @@ export default function PembicaraCreate() {
   const { register, handleSubmit } = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {
-    const response = await fetch("https://backend-invofest-mla8.vercel.app", {
+    const response = await fetch(`${API_URL}/pembicara`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -39,26 +41,9 @@ export default function PembicaraCreate() {
       </h1>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Input
-          label="Nama"
-          name="name"
-          placeholder="Nama pembicara"
-          register={register}
-        />
-
-        <Input
-          label="Role"
-          name="role"
-          placeholder="Role pembicara"
-          register={register}
-        />
-
-        <Input
-          label="Image"
-          name="image"
-          placeholder="URL image"
-          register={register}
-        />
+        <Input label="Nama" name="name" placeholder="Nama pembicara" register={register} />
+        <Input label="Role" name="role" placeholder="Role pembicara" register={register} />
+        <Input label="Image" name="image" placeholder="URL image" register={register} />
 
         <Button title="Simpan" variant="primary" />
       </form>
