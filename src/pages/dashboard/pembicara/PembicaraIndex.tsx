@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+const API_URL = "https://backend-invofest-mla8.vercel.app";
+
 type Pembicara = {
   id: number;
   name: string;
@@ -12,7 +14,7 @@ export default function PembicaraIndex() {
   const [speakers, setSpeakers] = useState<Pembicara[]>([]);
 
   const getPembicara = async () => {
-    const res = await fetch("hhttps://backend-invofest-mla8.vercel.app");
+    const res = await fetch(`${API_URL}/pembicara`);
     const data = await res.json();
     setSpeakers(Array.isArray(data) ? data : data.data || []);
   };
@@ -20,7 +22,7 @@ export default function PembicaraIndex() {
   const hapusPembicara = async (id: number) => {
     if (!confirm("Yakin mau hapus pembicara ini?")) return;
 
-    await fetch(`https://backend-invofest-mla8.vercel.app`, {
+    await fetch(`${API_URL}/pembicara/${id}`, {
       method: "DELETE",
     });
 
