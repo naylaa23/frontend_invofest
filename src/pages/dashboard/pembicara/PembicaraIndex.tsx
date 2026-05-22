@@ -12,7 +12,7 @@ export default function PembicaraIndex() {
   const [speakers, setSpeakers] = useState<Pembicara[]>([]);
 
   const getPembicara = async () => {
-    const res = await fetch("http://localhost:3000/pembicara");
+    const res = await fetch("hhttps://backend-invofest-mla8.vercel.app");
     const data = await res.json();
     setSpeakers(Array.isArray(data) ? data : data.data || []);
   };
@@ -20,7 +20,7 @@ export default function PembicaraIndex() {
   const hapusPembicara = async (id: number) => {
     if (!confirm("Yakin mau hapus pembicara ini?")) return;
 
-    await fetch(`http://localhost:3000/pembicara/${id}`, {
+    await fetch(`https://backend-invofest-mla8.vercel.app`, {
       method: "DELETE",
     });
 

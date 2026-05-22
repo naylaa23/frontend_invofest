@@ -5,6 +5,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 
+const API_URL = "https://backend-invofest-mla8.vercel.app";
+
 type FormData = {
   name: string;
   categoryId: string;
@@ -33,7 +35,7 @@ export default function EventCreate() {
   });
 
   const onSubmit = async (data: FormData) => {
-    const response = await fetch("http://localhost:3000/events", {
+    const response = await fetch(`${API_URL}/events`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

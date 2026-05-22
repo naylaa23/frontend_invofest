@@ -10,7 +10,7 @@ export default function PembicaraEdit() {
   const [image, setImage] = useState("");
 
   useEffect(() => {
-    fetch(`http://localhost:3000/pembicara/${id}`)
+    fetch("https://backend-invofest-mla8.vercel.app/pembicara/" + id)
       .then((res) => res.json())
       .then((data) => {
         setName(data.name);
@@ -20,7 +20,7 @@ export default function PembicaraEdit() {
   }, [id]);
 
   const updatePembicara = async () => {
-    const response = await fetch(`http://localhost:3000/pembicara/${id}`, {
+    const response = await fetch(`https://backend-invofest-mla8.vercel.app/pembicara/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

@@ -15,7 +15,7 @@ export default function PembicaraCreate() {
   const { register, handleSubmit } = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {
-    const response = await fetch("http://localhost:3000/pembicara", {
+    const response = await fetch("https://backend-invofest-mla8.vercel.app", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

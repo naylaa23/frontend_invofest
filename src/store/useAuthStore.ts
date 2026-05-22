@@ -51,7 +51,7 @@ interface AuthState {
   deleteEvent: (id: string) => Promise<boolean>;
 }
 
-const API_URL = "http://localhost:3000";
+const API_URL = "https://backend-invofest-mla8.vercel.app";
 
 export const useAuthStore = create<AuthState>()(
   persist(

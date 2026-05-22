@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+const API_URL = "https://backend-invofest-mla8.vercel.app";
+
 export default function EventEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -12,7 +14,7 @@ export default function EventEdit() {
   const [description, setDescription] = useState("");
 
   useEffect(() => {
-    fetch(`http://localhost:3000/events/${id}`)
+    fetch(`${API_URL}/events/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setName(data.name);
@@ -24,7 +26,7 @@ export default function EventEdit() {
   }, [id]);
 
   const updateEvent = async () => {
-    const response = await fetch(`http://localhost:3000/events/${id}`, {
+    const response = await fetch(`${API_URL}/events/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

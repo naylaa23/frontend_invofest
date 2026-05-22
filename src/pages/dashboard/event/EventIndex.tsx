@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+const API_URL = "https://backend-invofest-mla8.vercel.app";
+
 type EventType = {
   id: number;
   name: string;
@@ -15,7 +17,7 @@ export default function EventIndex() {
   const [loading, setLoading] = useState(true);
 
   const fetchEvents = async () => {
-    const response = await fetch("http://localhost:3000/events");
+    const response = await fetch(`${API_URL}/events`);
     const result = await response.json();
 
     setEvents(Array.isArray(result) ? result : []);
@@ -27,7 +29,7 @@ export default function EventIndex() {
 
     if (!yakin) return;
 
-    const response = await fetch(`http://localhost:3000/events/${id}`, {
+    const response = await fetch(`${API_URL}/events/${id}`, {
       method: "DELETE",
     });
 
