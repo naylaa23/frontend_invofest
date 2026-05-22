@@ -40,11 +40,20 @@ export default function EventCreate() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        name: data.name,
+        categoryId: data.categoryId,
+        location: data.location,
+        dateEvent: data.dateEvent,
+        description: data.description,
+      }),
     });
 
+    const result = await response.json();
+
     if (!response.ok) {
-      alert("Gagal menambah event");
+      console.log("ERROR EVENT:", result);
+      alert(result.message || "Gagal menambah event");
       return;
     }
 
