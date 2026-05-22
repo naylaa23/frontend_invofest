@@ -3,6 +3,11 @@ import { Link } from "react-router-dom";
 
 const API_URL = "https://backend-invofest-mla8.vercel.app";
 
+type CategoryItem = {
+  id: number;
+  name: string;
+};
+
 type EventItem = {
   id: number;
   name: string;
@@ -16,22 +21,33 @@ type SpeakerItem = {
 };
 
 export default function Dashboard() {
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState<CategoryItem[]>([]);
   const [events, setEvents] = useState<EventItem[]>([]);
   const [speakers, setSpeakers] = useState<SpeakerItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const getDashboardData = async () => {
+    try {
+      const categoryRes = await fetch(`${API_URL}/categories`);
+      const eventRes = await fetch(`${API_URL}/events`);
+      const speakerRes = await fetch(`${API_URL}/pembicara`);
+
+      const categoryData = await categoryRes.json();
+      const eventData = await eventRes.json();
+      const speakerData = await speakerRes.json();
+
+      setCategories(Array.isArray(categoryData) ? categoryData : []);
+      setEvents(Array.isArray(eventData) ? eventData : []);
+      setSpeakers(Array.isArray(speakerData) ? speakerData : []);
+    } catch (error) {
+      console.log("Gagal mengambil data dashboard:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    fetch(`${API_URL}/categories`)
-      .then((res) => res.json())
-      .then((data) => setCategories(data));
-
-    fetch(`${API_URL}/events`)
-      .then((res) => res.json())
-      .then((data) => setEvents(data));
-
-    fetch(`${API_URL}/pembicara`)
-      .then((res) => res.json())
-      .then((data) => setSpeakers(data));
+    getDashboardData();
   }, []);
 
   const stats = [
@@ -51,8 +67,12 @@ export default function Dashboard() {
             </div>
 
             <div className="text-right">
-              <h3 className="text-sm font-semibold text-gray-800">Admin</h3>
-              <p className="text-xs text-gray-500">naylazalfa03@gmail.com</p>
+              <h3 className="text-sm font-semibold text-gray-800">
+                Admin
+              </h3>
+              <p className="text-xs text-gray-500">
+                naylazalfa03@gmail.com
+              </p>
             </div>
           </div>
         </Link>
@@ -66,62 +86,79 @@ export default function Dashboard() {
         Selamat datang, berikut ringkasan data hari ini.
       </p>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-8">
-        {stats.map((item) => (
-          <div
-            key={item.title}
-            className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 text-center"
-          >
-            <p className="text-sm text-gray-500 mb-1">{item.title}</p>
-            <p className="text-2xl font-bold text-[#7B1D3F]">{item.value}</p>
+      {loading ? (
+        <p className="text-gray-500">Loading...</p>
+      ) : (
+        <>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-8">
+            {stats.map((item) => (
+              <div
+                key={item.title}
+                className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 text-center"
+              >
+                <p className="text-sm text-gray-500 mb-1">{item.title}</p>
+                <p className="text-2xl font-bold text-[#7B1D3F]">
+                  {item.value}
+                </p>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
 
-      <div className="grid md:grid-cols-2 gap-6">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <h2 className="font-semibold mb-4 text-gray-700 text-lg">
-            Event Terbaru
-          </h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+              <h2 className="font-semibold mb-4 text-gray-700 text-lg">
+                Event Terbaru
+              </h2>
 
-          {events.length === 0 ? (
-            <p className="text-sm text-gray-400">Belum ada event</p>
-          ) : (
-            <ul className="space-y-3">
-              {events.slice(0, 3).map((item) => (
-                <li
-                  key={item.id}
-                  className="flex justify-between border-b pb-3 last:border-none"
-                >
-                  <p className="font-medium text-gray-800">{item.name}</p>
-                  <p className="text-gray-400 text-sm">
-                    {new Date(item.dateEvent).toLocaleDateString("id-ID")}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+              {events.length === 0 ? (
+                <p className="text-sm text-gray-400">Belum ada event</p>
+              ) : (
+                <ul className="space-y-3">
+                  {events.slice(0, 3).map((item) => (
+                    <li
+                      key={item.id}
+                      className="flex justify-between border-b pb-3 last:border-none"
+                    >
+                      <p className="font-medium text-gray-800">
+                        {item.name}
+                      </p>
+                      <p className="text-gray-400 text-sm">
+                        {new Date(item.dateEvent).toLocaleDateString("id-ID")}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <h2 className="font-semibold mb-4 text-gray-700 text-lg">
-            Pembicara Terbaru
-          </h2>
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+              <h2 className="font-semibold mb-4 text-gray-700 text-lg">
+                Pembicara Terbaru
+              </h2>
 
-          {speakers.length === 0 ? (
-            <p className="text-sm text-gray-400">Belum ada pembicara</p>
-          ) : (
-            <ul className="space-y-3">
-              {speakers.slice(0, 3).map((item) => (
-                <li key={item.id} className="border-b pb-3 last:border-none">
-                  <p className="font-medium text-gray-800">{item.name}</p>
-                  <p className="text-gray-400 text-sm">{item.role}</p>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </div>
+              {speakers.length === 0 ? (
+                <p className="text-sm text-gray-400">Belum ada pembicara</p>
+              ) : (
+                <ul className="space-y-3">
+                  {speakers.slice(0, 3).map((item) => (
+                    <li
+                      key={item.id}
+                      className="border-b pb-3 last:border-none"
+                    >
+                      <p className="font-medium text-gray-800">
+                        {item.name}
+                      </p>
+                      <p className="text-gray-400 text-sm">
+                        {item.role}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
