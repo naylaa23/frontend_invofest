@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+const API_URL = "https://backend-invofest-mla8.vercel.app";
+
 type Category = {
   id: number;
   name: string;
@@ -10,7 +12,7 @@ export default function CategoryIndex() {
   const [categories, setCategories] = useState<Category[]>([]);
 
   const getCategories = async () => {
-    const res = await fetch("http://localhost:3000/categories");
+    const res = await fetch(`${API_URL}/categories`);
     const data = await res.json();
     setCategories(data);
   };
@@ -20,7 +22,7 @@ export default function CategoryIndex() {
 
     if (!yakin) return;
 
-    await fetch(`http://localhost:3000/categories/${id}`, {
+    await fetch(`${API_URL}/categories/${id}`, {
       method: "DELETE",
     });
 

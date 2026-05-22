@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import Input from "../../../component/ui/Input";
 import Button from "../../../component/ui/Button";
 
+const API_URL = "https://backend-invofest-mla8.vercel.app";
+
 type FormData = {
   name: string;
 };
@@ -25,7 +27,7 @@ export default function CategoryCreate() {
   });
 
   const onSubmit = async (data: FormData) => {
-    const response = await fetch("http://localhost:3000/categories", {
+    const response = await fetch(`${API_URL}/categories`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -51,6 +53,7 @@ export default function CategoryCreate() {
           <h1 className="text-3xl font-bold text-[#7B1D3F]">
             Tambah Kategori
           </h1>
+
           <p className="text-gray-400 text-sm mt-1">
             Isi data kategori event kamu
           </p>

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+const API_URL = "https://backend-invofest-mla8.vercel.app";
+
 export default function CategoryEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -8,22 +10,19 @@ export default function CategoryEdit() {
   const [name, setName] = useState("");
 
   useEffect(() => {
-    fetch(`http://localhost:3000/categories/${id}`)
+    fetch(`${API_URL}/categories/${id}`)
       .then((res) => res.json())
       .then((data) => setName(data.name));
   }, [id]);
 
   const handleUpdate = async () => {
-    const response = await fetch(
-      `http://localhost:3000/categories/${id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name }),
-      }
-    );
+    const response = await fetch(`${API_URL}/categories/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name }),
+    });
 
     if (!response.ok) {
       alert("Gagal update kategori");
@@ -37,7 +36,6 @@ export default function CategoryEdit() {
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center items-center p-6">
       <div className="bg-white w-full max-w-xl rounded-3xl shadow-lg p-8">
-
         <h1 className="text-3xl font-bold text-[#7B1D3F] mb-2">
           Edit Kategori
         </h1>
@@ -75,7 +73,6 @@ export default function CategoryEdit() {
             Batal
           </button>
         </div>
-
       </div>
     </div>
   );

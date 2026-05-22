@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+const API_URL = "https://backend-invofest-mla8.vercel.app";
+
 type EventItem = {
   id: number;
   name: string;
@@ -19,15 +21,15 @@ export default function Dashboard() {
   const [speakers, setSpeakers] = useState<SpeakerItem[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/categories")
+    fetch(`${API_URL}/categories`)
       .then((res) => res.json())
       .then((data) => setCategories(data));
 
-    fetch("http://localhost:3000/events")
+    fetch(`${API_URL}/events`)
       .then((res) => res.json())
       .then((data) => setEvents(data));
 
-    fetch("http://localhost:3000/pembicara")
+    fetch(`${API_URL}/pembicara`)
       .then((res) => res.json())
       .then((data) => setSpeakers(data));
   }, []);
