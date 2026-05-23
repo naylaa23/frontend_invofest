@@ -1,6 +1,6 @@
 GITHUB BE
 
-https://backend-invofest-mla8.vercel.app
+https://github.com/naylaa23/backend-invofest
 
 LOGIN
 EMAIL naylazalfa03@gmail.com
