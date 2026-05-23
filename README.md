@@ -3,5 +3,5 @@ GITHUB BE
 https://github.com/naylaa23/backend-invofest
 
 LOGIN
-EMAIL naylazalfa03@gmail.com
+NIM : 24090017
 PW : 24090017
