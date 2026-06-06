@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-const API_URL = "https://backend-invofest-mla8.vercel.app";
+const API_URL = "http://localhost:3000";
 
 export default function EventEdit() {
   const { id } = useParams();
@@ -50,64 +50,58 @@ export default function EventEdit() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center items-center p-6">
-      <div className="bg-white w-full max-w-xl rounded-3xl shadow-lg p-8">
-        <h1 className="text-3xl font-bold text-[#7B1D3F] mb-2">
+    <div className="p-8 max-w-xl mx-auto">
+      <div className="bg-white p-6 rounded-xl shadow">
+        <h1 className="text-2xl font-bold text-[#7B1D3F] mb-5">
           Edit Event
         </h1>
 
-        <p className="text-gray-400 mb-8">
-          Perbarui data event sesuai kebutuhan
-        </p>
+        <input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Nama event"
+          className="w-full border px-3 py-2 rounded-lg mb-4"
+        />
 
-        <div className="space-y-4">
-          <input
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Nama event"
-            className="w-full border border-gray-200 rounded-xl px-4 py-3"
-          />
+        <input
+          value={categoryId}
+          onChange={(e) => setCategoryId(e.target.value)}
+          placeholder="ID kategori"
+          className="w-full border px-3 py-2 rounded-lg mb-4"
+        />
 
-          <input
-            value={categoryId}
-            onChange={(e) => setCategoryId(e.target.value)}
-            placeholder="ID kategori"
-            className="w-full border border-gray-200 rounded-xl px-4 py-3"
-          />
+        <input
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          placeholder="Lokasi"
+          className="w-full border px-3 py-2 rounded-lg mb-4"
+        />
 
-          <input
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            placeholder="Lokasi"
-            className="w-full border border-gray-200 rounded-xl px-4 py-3"
-          />
+        <input
+          type="date"
+          value={dateEvent}
+          onChange={(e) => setDateEvent(e.target.value)}
+          className="w-full border px-3 py-2 rounded-lg mb-4"
+        />
 
-          <input
-            type="date"
-            value={dateEvent}
-            onChange={(e) => setDateEvent(e.target.value)}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3"
-          />
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="Deskripsi"
+          className="w-full border px-3 py-2 rounded-lg mb-4"
+        />
 
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Deskripsi"
-            className="w-full border border-gray-200 rounded-xl px-4 py-3"
-          />
-        </div>
-
-        <div className="flex gap-3 mt-8">
+        <div className="flex gap-2">
           <button
             onClick={updateEvent}
-            className="flex-1 bg-[#7B1D3F] text-white py-3 rounded-xl font-semibold"
+            className="bg-[#7B1D3F] text-white px-4 py-2 rounded-lg"
           >
             Simpan
           </button>
 
           <button
             onClick={() => navigate("/dashboard/event")}
-            className="flex-1 border py-3 rounded-xl font-semibold"
+            className="border px-4 py-2 rounded-lg"
           >
             Batal
           </button>

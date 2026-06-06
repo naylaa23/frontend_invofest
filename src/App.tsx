@@ -23,6 +23,10 @@ import PembicaraIndex from "./pages/dashboard/pembicara/PembicaraIndex";
 import PembicaraCreate from "./pages/dashboard/pembicara/PembicaraCreate";
 import PembicaraEdit from "./pages/dashboard/pembicara/PembicaraEdit";
 
+import UserIndex from "./pages/dashboard/user/UserIndex";
+import UserCreate from "./pages/dashboard/user/UserCreate";
+import UserEdit from "./pages/dashboard/user/UserEdit";
+
 import MainLayout from "./layout/MainLayout";
 import AuthLayout from "./layout/AuthLayout";
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -58,6 +62,22 @@ export default function App() {
             <Route
               path="/dashboard/biodata"
               element={<Biodata />}
+            />
+
+            {/* USER */}
+            <Route
+              path="/dashboard/user"
+              element={<UserIndex />}
+            />
+
+            <Route
+              path="/dashboard/user/create"
+              element={<UserCreate />}
+            />
+
+            <Route
+              path="/dashboard/user/edit/:id"
+              element={<UserEdit />}
             />
 
             {/* CATEGORY */}

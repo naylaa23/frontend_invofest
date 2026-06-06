@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const API_URL = "https://backend-invofest-mla8.vercel.app";
+const API_URL = "http://localhost:3000";
 
 type Category = {
   id: number;
@@ -18,16 +18,14 @@ export default function CategoryIndex() {
   };
 
   const hapusCategory = async (id: number) => {
-    const yakin = confirm("Yakin ingin menghapus category?");
-
+    const yakin = confirm("Yakin ingin menghapus kategori?");
     if (!yakin) return;
 
     await fetch(`${API_URL}/categories/${id}`, {
       method: "DELETE",
     });
 
-    alert("Category berhasil dihapus");
-
+    alert("Kategori berhasil dihapus");
     getCategories();
   };
 
@@ -64,7 +62,9 @@ export default function CategoryIndex() {
           >
             <div>
               <h2 className="font-semibold">{item.name}</h2>
-              <p className="text-xs text-gray-400">ID: {item.id}</p>
+              <p className="text-xs text-gray-400">
+                ID: {item.id}
+              </p>
             </div>
 
             <div className="flex gap-2">
@@ -84,6 +84,12 @@ export default function CategoryIndex() {
             </div>
           </div>
         ))}
+
+        {categories.length === 0 && (
+          <p className="text-sm text-gray-400">
+            Belum ada data kategori
+          </p>
+        )}
       </div>
     </div>
   );

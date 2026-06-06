@@ -13,51 +13,35 @@ export default function DashboardLayout() {
 
   return (
     <div className="flex w-full h-screen bg-gray-100">
-
-      {/* SIDEBAR */}
       <aside className="w-64 bg-[#7A1C3D] text-white flex flex-col justify-between shadow-lg">
-
-        {/* LOGO */}
         <div className="h-16 flex items-center justify-center border-b border-white/20">
           <h2 className="text-xl font-bold tracking-wide">
             INFOVEST
           </h2>
         </div>
 
-        {/* MENU */}
         <nav className="flex flex-col gap-2 p-4 text-sm">
-
-          <Link
-            to="/dashboard"
-            className="px-4 py-2 rounded-lg hover:bg-[#5C142E] transition"
-          >
+          <Link to="/dashboard" className="px-4 py-2 rounded-lg hover:bg-[#5C142E] transition">
             Dashboard
           </Link>
 
-          <Link
-            to="/dashboard/category"
-            className="px-4 py-2 rounded-lg hover:bg-[#5C142E] transition"
-          >
+          <Link to="/dashboard/user" className="px-4 py-2 rounded-lg hover:bg-[#5C142E] transition">
+            User
+          </Link>
+
+          <Link to="/dashboard/category" className="px-4 py-2 rounded-lg hover:bg-[#5C142E] transition">
             Category Event
           </Link>
 
-          <Link
-            to="/dashboard/event"
-            className="px-4 py-2 rounded-lg hover:bg-[#5C142E] transition"
-          >
+          <Link to="/dashboard/event" className="px-4 py-2 rounded-lg hover:bg-[#5C142E] transition">
             Event
           </Link>
 
-          <Link
-            to="/dashboard/pembicara"
-            className="px-4 py-2 rounded-lg hover:bg-[#5C142E] transition"
-          >
+          <Link to="/dashboard/pembicara" className="px-4 py-2 rounded-lg hover:bg-[#5C142E] transition">
             Pembicara
           </Link>
-
         </nav>
 
-        {/* LOGOUT */}
         <div className="p-4">
           <button
             onClick={handleLogout}
@@ -66,14 +50,11 @@ export default function DashboardLayout() {
             Logout
           </button>
         </div>
-
       </aside>
 
-      {/* CONTENT */}
       <main className="flex-1 p-6 overflow-y-auto">
         <Outlet />
       </main>
-
     </div>
   );
 }

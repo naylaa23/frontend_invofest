@@ -1,119 +1,171 @@
-import { useForm } from "react-hook-form";
-import Input from "../../../component/ui/Input";
-import Button from "../../../component/ui/Button";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const API_URL = "https://backend-invofest-mla8.vercel.app";
-
-type FormData = {
-  name: string;
-  categoryId: string;
-  location: string;
-  dateEvent: string;
-  description: string;
-};
-
-const schema = z.object({
-  name: z.string().min(3, "Nama event harus diisi"),
-  categoryId: z.string().min(1, "ID category harus diisi"),
-  location: z.string().min(3, "Lokasi harus diisi"),
-  dateEvent: z.string().min(1, "Tanggal event harus diisi"),
-  description: z.string().min(3, "Deskripsi harus diisi"),
-});
+const API_URL = "http://localhost:3000";
 
 export default function EventCreate() {
   const navigate = useNavigate();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>({
-    resolver: zodResolver(schema),
-  });
+  const [name, setName] = useState("");
+  const [categoryId, setCategoryId] = useState("");
+  const [location, setLocation] = useState("");
+  const [dateEvent, setDateEvent] = useState("");
+  const [description, setDescription] = useState("");
 
-  const onSubmit = async (data: FormData) => {
+  const [nameError, setNameError] = useState("");
+  const [categoryError, setCategoryError] = useState("");
+  const [locationError, setLocationError] = useState("");
+  const [dateError, setDateError] = useState("");
+  const [descriptionError, setDescriptionError] = useState("");
+
+  const simpanEvent = async () => {
+    setNameError("");
+    setCategoryError("");
+    setLocationError("");
+    setDateError("");
+    setDescriptionError("");
+
+    let valid = true;
+
+    if (name.length < 3) {
+      setNameError("Nama event minimal 3 karakter");
+      valid = false;
+    }
+
+    if (categoryId === "") {
+      setCategoryError("ID kategori wajib diisi");
+      valid = false;
+    }
+
+    if (location.length < 3) {
+      setLocationError("Lokasi minimal 3 karakter");
+      valid = false;
+    }
+
+    if (dateEvent === "") {
+      setDateError("Tanggal event wajib diisi");
+      valid = false;
+    }
+
+    if (description.length < 3) {
+      setDescriptionError("Deskripsi minimal 3 karakter");
+      valid = false;
+    }
+
+    if (!valid) return;
+
     const response = await fetch(`${API_URL}/events`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name: data.name,
-        categoryId: data.categoryId,
-        location: data.location,
-        dateEvent: data.dateEvent,
-        description: data.description,
+        name,
+        categoryId,
+        location,
+        dateEvent,
+        description,
       }),
     });
 
-    const result = await response.json();
-
     if (!response.ok) {
-      console.log("ERROR EVENT:", result);
-      alert(result.message || "Gagal menambah event");
+      setDescriptionError("Gagal membuat event");
       return;
     }
 
-    alert("Event berhasil ditambahkan");
     navigate("/dashboard/event");
   };
 
   return (
-    <div className="px-10 py-10 max-w-4xl mx-auto">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-[#7B1D3F]">Tambah Event</h1>
-        <p className="text-gray-500 text-sm">
-          Tambahkan event baru ke dalam sistem
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 py-10">
+      <div className="w-full max-w-xl bg-white p-8 rounded-3xl shadow">
+        <h1 className="text-3xl font-bold text-[#7B1D3F] mb-2">
+          Tambah Event
+        </h1>
+
+        <p className="text-gray-400 text-sm mb-6">
+          Isi data event kamu
         </p>
-      </div>
 
-      <div className="bg-white rounded-xl shadow-sm">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Input
-            label="Nama event"
-            name="name"
+        <div className="mb-4">
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             placeholder="Masukkan nama event"
-            register={register}
-            error={errors.name?.message}
+            className={`w-full border px-4 py-3 rounded-xl ${
+              nameError ? "border-red-500" : "border-gray-300"
+            }`}
           />
+          {nameError && (
+            <p className="text-red-500 text-sm mt-1">{nameError}</p>
+          )}
+        </div>
 
-          <Input
-            label="ID Category"
-            name="categoryId"
+        <div className="mb-4">
+          <input
+            value={categoryId}
+            onChange={(e) => setCategoryId(e.target.value)}
             placeholder="Masukkan ID kategori"
-            register={register}
-            error={errors.categoryId?.message}
+            className={`w-full border px-4 py-3 rounded-xl ${
+              categoryError ? "border-red-500" : "border-gray-300"
+            }`}
           />
+          {categoryError && (
+            <p className="text-red-500 text-sm mt-1">{categoryError}</p>
+          )}
+        </div>
 
-          <Input
-            label="Lokasi"
-            name="location"
-            placeholder="Masukkan lokasi event"
-            register={register}
-            error={errors.location?.message}
+        <div className="mb-4">
+          <input
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            placeholder="Masukkan lokasi"
+            className={`w-full border px-4 py-3 rounded-xl ${
+              locationError ? "border-red-500" : "border-gray-300"
+            }`}
           />
+          {locationError && (
+            <p className="text-red-500 text-sm mt-1">{locationError}</p>
+          )}
+        </div>
 
-          <Input
-            label="Tanggal Event"
-            name="dateEvent"
-            placeholder="2026-05-22"
-            register={register}
-            error={errors.dateEvent?.message}
+        <div className="mb-4">
+          <input
+            type="date"
+            value={dateEvent}
+            onChange={(e) => setDateEvent(e.target.value)}
+            className={`w-full border px-4 py-3 rounded-xl ${
+              dateError ? "border-red-500" : "border-gray-300"
+            }`}
           />
+          {dateError && (
+            <p className="text-red-500 text-sm mt-1">{dateError}</p>
+          )}
+        </div>
 
-          <Input
-            label="Deskripsi"
-            name="description"
+        <div className="mb-5">
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             placeholder="Masukkan deskripsi event"
-            register={register}
-            error={errors.description?.message}
+            rows={4}
+            className={`w-full border px-4 py-3 rounded-xl ${
+              descriptionError ? "border-red-500" : "border-gray-300"
+            }`}
           />
+          {descriptionError && (
+            <p className="text-red-500 text-sm mt-1">
+              {descriptionError}
+            </p>
+          )}
+        </div>
 
-          <Button title="Simpan" variant="primary" />
-        </form>
+        <button
+          onClick={simpanEvent}
+          className="bg-[#7B1D3F] text-white px-5 py-3 rounded-xl"
+        >
+          Simpan
+        </button>
       </div>
     </div>
   );

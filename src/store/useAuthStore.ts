@@ -140,7 +140,6 @@ export const useAuthStore = create<AuthState>()(
         } catch { return false; }
       },
 
-      // ================= MODUL PEMBICARA =================
       fetchSpeakers: async () => {
         try {
           const response = await fetch(`${API_URL}/pembicara`);
@@ -194,7 +193,6 @@ export const useAuthStore = create<AuthState>()(
         } catch { return false; }
       },
 
-      // ================= MODUL EVENT =================
       fetchEvents: async () => {
         set({ isLoading: true });
         try {
@@ -249,7 +247,6 @@ export const useAuthStore = create<AuthState>()(
 
       deleteEvent: async (id) => {
         try {
-          // FIXED: Menggunakan /events
           const response = await fetch(`${API_URL}/events/${id}`, { method: "DELETE" });
           if (response.ok) {
             await get().fetchEvents();

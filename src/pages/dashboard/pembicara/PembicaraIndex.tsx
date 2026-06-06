@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const API_URL = "https://backend-invofest-mla8.vercel.app";
+const API_URL = "http://localhost:3000";
 
 type Pembicara = {
   id: number;
@@ -16,16 +16,18 @@ export default function PembicaraIndex() {
   const getPembicara = async () => {
     const res = await fetch(`${API_URL}/pembicara`);
     const data = await res.json();
-    setSpeakers(Array.isArray(data) ? data : data.data || []);
+    setSpeakers(data);
   };
 
-  const hapusPembicara = async (pembicaraId: number) => {
-    if (!confirm("Yakin mau hapus pembicara ini?")) return;
+  const hapusPembicara = async (id: number) => {
+    const yakin = confirm("Yakin ingin menghapus pembicara?");
+    if (!yakin) return;
 
-    await fetch(`${API_URL}/pembicara/${pembicaraId}`, {
+    await fetch(`${API_URL}/pembicara/${id}`, {
       method: "DELETE",
     });
 
+    alert("Pembicara berhasil dihapus");
     getPembicara();
   };
 
@@ -34,11 +36,16 @@ export default function PembicaraIndex() {
   }, []);
 
   return (
-    <div className="p-8 max-w-4xl mx-auto">
-      <div className="flex justify-between items-center mb-6">
+    <div className="p-6 max-w-5xl mx-auto">
+      <div className="flex justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-[#7B1D3F]">Pembicara</h1>
-          <p className="text-sm text-gray-500">Data pembicara event</p>
+          <h1 className="text-2xl font-bold text-[#7B1D3F]">
+            Data Pembicara
+          </h1>
+
+          <p className="text-sm text-gray-500">
+            Kelola pembicara event
+          </p>
         </div>
 
         <Link
@@ -55,28 +62,29 @@ export default function PembicaraIndex() {
             key={item.id}
             className="flex justify-between items-center bg-gray-50 rounded-xl p-4"
           >
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#7B1D3F] text-white flex items-center justify-center font-semibold">
-                {item.name.charAt(0)}
-              </div>
+            <div>
+              <h2 className="font-semibold">{item.name}</h2>
 
-              <div>
-                <h3 className="font-semibold text-gray-800">{item.name}</h3>
-                <p className="text-sm text-gray-500">{item.role}</p>
-              </div>
+              <p className="text-xs text-gray-400">
+                Role: {item.role}
+              </p>
+
+              <p className="text-xs text-gray-400">
+                ID: {item.id}
+              </p>
             </div>
 
             <div className="flex gap-2">
               <Link
                 to={`/dashboard/pembicara/edit/${item.id}`}
-                className="px-3 py-1 rounded-md bg-yellow-100 text-yellow-700 text-sm"
+                className="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-md text-sm"
               >
                 Edit
               </Link>
 
               <button
                 onClick={() => hapusPembicara(item.id)}
-                className="px-3 py-1 rounded-md bg-red-100 text-red-600 text-sm"
+                className="px-3 py-1 bg-red-100 text-red-600 rounded-md text-sm"
               >
                 Hapus
               </button>
@@ -84,9 +92,11 @@ export default function PembicaraIndex() {
           </div>
         ))}
 
-        <p className="text-sm text-gray-500">
-          Total: {speakers.length} pembicara
-        </p>
+        {speakers.length === 0 && (
+          <p className="text-sm text-gray-400">
+            Belum ada data pembicara
+          </p>
+        )}
       </div>
     </div>
   );

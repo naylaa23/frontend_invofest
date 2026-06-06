@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+const API_URL = "http://localhost:3000";
+
 export default function PembicaraEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -10,7 +12,7 @@ export default function PembicaraEdit() {
   const [image, setImage] = useState("");
 
   useEffect(() => {
-    fetch("https://backend-invofest-mla8.vercel.app/pembicara/" + id)
+    fetch(`${API_URL}/pembicara/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setName(data.name);
@@ -20,12 +22,16 @@ export default function PembicaraEdit() {
   }, [id]);
 
   const updatePembicara = async () => {
-    const response = await fetch(`https://backend-invofest-mla8.vercel.app/pembicara/${id}`, {
+    const response = await fetch(`${API_URL}/pembicara/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, role, image }),
+      body: JSON.stringify({
+        name,
+        role,
+        image,
+      }),
     });
 
     if (!response.ok) {
@@ -38,50 +44,44 @@ export default function PembicaraEdit() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center items-center p-6">
-      <div className="bg-white w-full max-w-xl rounded-3xl shadow-lg p-8">
-        <h1 className="text-3xl font-bold text-[#7B1D3F] mb-2">
+    <div className="p-8 max-w-xl mx-auto">
+      <div className="bg-white p-6 rounded-xl shadow">
+        <h1 className="text-2xl font-bold text-[#7B1D3F] mb-5">
           Edit Pembicara
         </h1>
 
-        <p className="text-gray-400 mb-8">
-          Perbarui data pembicara
-        </p>
+        <input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Nama pembicara"
+          className="w-full border px-3 py-2 rounded-lg mb-4"
+        />
 
-        <div className="space-y-4">
-          <input
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Nama pembicara"
-            className="w-full border border-gray-200 rounded-xl px-4 py-3"
-          />
+        <input
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+          placeholder="Role pembicara"
+          className="w-full border px-3 py-2 rounded-lg mb-4"
+        />
 
-          <input
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            placeholder="Role pembicara"
-            className="w-full border border-gray-200 rounded-xl px-4 py-3"
-          />
+        <input
+          value={image}
+          onChange={(e) => setImage(e.target.value)}
+          placeholder="URL image"
+          className="w-full border px-3 py-2 rounded-lg mb-4"
+        />
 
-          <input
-            value={image}
-            onChange={(e) => setImage(e.target.value)}
-            placeholder="URL image"
-            className="w-full border border-gray-200 rounded-xl px-4 py-3"
-          />
-        </div>
-
-        <div className="flex gap-3 mt-8">
+        <div className="flex gap-2">
           <button
             onClick={updatePembicara}
-            className="flex-1 bg-[#7B1D3F] text-white py-3 rounded-xl font-semibold"
+            className="bg-[#7B1D3F] text-white px-4 py-2 rounded-lg"
           >
             Simpan
           </button>
 
           <button
             onClick={() => navigate("/dashboard/pembicara")}
-            className="flex-1 border py-3 rounded-xl font-semibold"
+            className="border px-4 py-2 rounded-lg"
           >
             Batal
           </button>
