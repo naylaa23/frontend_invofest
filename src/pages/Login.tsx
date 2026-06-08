@@ -5,18 +5,19 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 const schema = z.object({
-  nim: z.string().min(8, "NIM minimal 8 karakter"),
+  username: z.string().min(1, "Username harus diisi"),
   password: z.string().min(8, "Password minimal 8 karakter"),
 });
 
 type FormData = {
-  nim: string;
+  username: string;
   password: string;
 };
 
 export default function Login() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const {
     register,
@@ -26,18 +27,34 @@ export default function Login() {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     setLoading(true);
+    setError(null);
 
-    const cleanNim = data.nim.trim();
-    const cleanPassword = data.password.trim();
+    try {
+      const response = await fetch("http://localhost:3000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: data.username,
+          password: data.password,
+        }),
+      });
 
-    if (cleanNim === "24090017" && cleanPassword === "24090017") {
-      localStorage.setItem("token", "dummy_token");
+      const result = await response.json();
+
+      if (!response.ok) {
+        setError(result.message || "Login gagal!");
+        setLoading(false);
+        return;
+      }
+
+      localStorage.setItem("token", result.data.token);
       alert("Login berhasil!");
       navigate("/dashboard");
-    } else {
-      alert("Login gagal");
+
+    } catch (err) {
+      setError("Tidak bisa terhubung ke server. Pastikan BE sudah berjalan!");
       setLoading(false);
     }
   };
@@ -48,29 +65,30 @@ export default function Login() {
         <h1 className="text-3xl font-bold text-[#7B1D3F] mb-2">
           Selamat Datang
         </h1>
-
         <p className="text-gray-400 mb-6 text-sm">
           Silahkan login untuk melanjutkan
         </p>
 
+        {error && (
+          <div className="mb-4 px-4 py-3 rounded-lg border border-red-200 bg-red-50 text-red-700 text-sm font-medium">
+            {error}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit(onSubmit)} className="text-left space-y-4">
           <div>
             <label className="block mb-1 font-semibold text-gray-700 text-sm">
-              NIM
+              Username
             </label>
-
             <input
-              {...register("nim")}
-              placeholder="Masukkan NIM"
+              {...register("username")}
+              placeholder="Masukkan Username"
               className={`w-full px-3 py-3 rounded-xl border bg-gray-50 outline-none focus:ring-2 focus:ring-[#7B1D3F] ${
-                errors.nim ? "border-red-500" : "border-gray-300"
+                errors.username ? "border-red-500" : "border-gray-300"
               }`}
             />
-
-            {errors.nim && (
-              <p className="text-xs text-red-500 mt-1">
-                {errors.nim.message}
-              </p>
+            {errors.username && (
+              <p className="text-xs text-red-500 mt-1">{errors.username.message}</p>
             )}
           </div>
 
@@ -78,7 +96,6 @@ export default function Login() {
             <label className="block mb-1 font-semibold text-gray-700 text-sm">
               Password
             </label>
-
             <input
               type="password"
               {...register("password")}
@@ -87,11 +104,8 @@ export default function Login() {
                 errors.password ? "border-red-500" : "border-gray-300"
               }`}
             />
-
             {errors.password && (
-              <p className="text-xs text-red-500 mt-1">
-                {errors.password.message}
-              </p>
+              <p className="text-xs text-red-500 mt-1">{errors.password.message}</p>
             )}
           </div>
 
